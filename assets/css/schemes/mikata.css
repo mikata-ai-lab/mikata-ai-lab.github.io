@@ -1,0 +1,51 @@
+/* ============================================
+   Mikata AI — Custom Color Scheme for Blowfish
+   ============================================
+
+   Palette:
+   - Neutral: Warm near-black (premium dark feel)
+   - Primary: Gold/Amber (#f0a500) — signature brand color
+   - Secondary: Orange/Coral (#ff6b35) — energy accent
+
+   Each color needs 10 shades (50-900) as comma-separated RGB values.
+   ============================================ */
+
+:root {
+  --color-neutral: 255, 255, 255;
+
+  /* Warm Dark — near-black with warm undertone, not pure black */
+  --color-neutral-50: 250, 249, 247;
+  --color-neutral-100: 243, 240, 236;
+  --color-neutral-200: 224, 218, 210;
+  --color-neutral-300: 189, 181, 170;
+  --color-neutral-400: 140, 132, 121;
+  --color-neutral-500: 99, 92, 82;
+  --color-neutral-600: 72, 66, 58;
+  --color-neutral-700: 50, 46, 40;
+  --color-neutral-800: 32, 29, 25;
+  --color-neutral-900: 18, 16, 14;
+
+  /* Gold / Amber — PRIMARY brand color */
+  --color-primary-50: 255, 251, 235;
+  --color-primary-100: 254, 243, 199;
+  --color-primary-200: 253, 230, 138;
+  --color-primary-300: 252, 211, 77;
+  --color-primary-400: 251, 191, 36;
+  --color-primary-500: 240, 165, 0;
+  --color-primary-600: 217, 142, 0;
+  --color-primary-700: 180, 113, 0;
+  --color-primary-800: 146, 88, 8;
+  --color-primary-900: 120, 72, 12;
+
+  /* Orange / Coral — SECONDARY accent */
+  --color-secondary-50: 255, 243, 237;
+  --color-secondary-100: 255, 228, 213;
+  --color-secondary-200: 255, 200, 170;
+  --color-secondary-300: 255, 170, 120;
+  --color-secondary-400: 255, 138, 80;
+  --color-secondary-500: 255, 107, 53;
+  --color-secondary-600: 230, 85, 35;
+  --color-secondary-700: 194, 65, 20;
+  --color-secondary-800: 158, 52, 18;
+  --color-secondary-900: 130, 44, 18;
+}

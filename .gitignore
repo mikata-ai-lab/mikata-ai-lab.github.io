@@ -1,0 +1,21 @@
+# Hugo build output
+public/
+resources/
+hugo_stats.json
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (if adding npm dependencies later)
+node_modules/
+
+# Claude Code local settings
+.claude/settings.local.json

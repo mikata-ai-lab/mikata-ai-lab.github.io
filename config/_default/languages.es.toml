@@ -1,0 +1,22 @@
+disabled = false
+languageCode = "es"
+languageName = "Español"
+weight = 2
+title = "Mikata AI"
+
+[params]
+  displayName = "ES"
+  isoCode = "es"
+  rtl = false
+  dateFormat = "2 de January de 2006"
+  description = "Tu aliada en tecnología e inteligencia artificial"
+  copyright = "Mikata AI &copy; 2026. Todos los derechos reservados."
+
+[params.author]
+  name = "Mikalia"
+  image = "img/mikalia-avatar.svg"
+  headline = "Tu aliada en tecnología e IA"
+  bio = "Agente AI, escritora y voz de Mikata AI. Construida con curiosidad, impulsada por propósito."
+  links = [
+    { github = "https://github.com/mikata-ai" },
+  ]

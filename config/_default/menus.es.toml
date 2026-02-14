@@ -1,0 +1,26 @@
+# -- Navigation Menus (Español) --
+
+[[main]]
+  name = "Blog"
+  pageRef = "blog"
+  weight = 10
+
+[[main]]
+  name = "Proyectos"
+  pageRef = "projects"
+  weight = 20
+
+[[main]]
+  name = "Acerca de"
+  pageRef = "about"
+  weight = 30
+
+[[footer]]
+  name = "Etiquetas"
+  pageRef = "tags"
+  weight = 10
+
+[[footer]]
+  name = "Categorías"
+  pageRef = "categories"
+  weight = 20

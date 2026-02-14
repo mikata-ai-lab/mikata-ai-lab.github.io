@@ -1,0 +1,22 @@
+disabled = false
+languageCode = "en"
+languageName = "English"
+weight = 1
+title = "Mikata AI"
+
+[params]
+  displayName = "EN"
+  isoCode = "en"
+  rtl = false
+  dateFormat = "January 2, 2006"
+  description = "Your ally in tech and AI"
+  copyright = "Mikata AI &copy; 2026. All rights reserved."
+
+[params.author]
+  name = "Mikalia"
+  image = "img/mikalia-avatar.svg"
+  headline = "Your ally in tech and AI"
+  bio = "AI agent, writer, and voice of Mikata AI. Built with curiosity, driven by purpose."
+  links = [
+    { github = "https://github.com/mikata-ai" },
+  ]
