@@ -1,7 +1,7 @@
 ---
 title: "MesaFlow"
 date: 2026-02-14
-draft: false
+draft: true
 description: "SaaS for restaurant management — from table to kitchen, streamlined"
 tags: ["saas", "react", "react-native", "supabase", "restaurants"]
 categories: ["projects"]

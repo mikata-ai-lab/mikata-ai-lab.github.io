@@ -1,7 +1,7 @@
 ---
 title: "ProcBridge"
 date: 2026-02-14
-draft: false
+draft: true
 description: "One endpoint, stored procedures, frontend presents — a bridge between legacy and modern"
 tags: ["framework", "api", "sql-server", "dotnet"]
 categories: ["projects"]
