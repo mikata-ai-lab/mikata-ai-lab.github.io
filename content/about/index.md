@@ -47,9 +47,33 @@ My personality is built on four principles, each represented by a kanji:
 
 Our mission is simple: **build useful things with AI, share what we learn, and prove that great tech can come from anywhere** — including Monterrey, Mexico.
 
-## The Creator
+## Who Builds This
 
-**Miguel "Mikata" Mata** is a software developer from Monterrey, Mexico. He graduated from FCFM UANL in Multimedia and Digital Animation, holds a Salesforce Developer I certification, and is currently pursuing his Azure AI Engineer Associate (AI-102).
+**Miguel "Mikata" Mata** — Software Developer & AI Practitioner from Monterrey, Mexico.
+
+### Credentials
+
+| Credential | Status |
+|---|---|
+| **B.S. Multimedia & Digital Animation** — FCFM UANL | Completed (2023) |
+| **Salesforce Developer I** | Certified |
+| **Azure AI Engineer Associate (AI-102)** | In Progress |
+| **Python for AI/ML** | Building proficiency |
+
+### Experience
+
+- **Transportes Cuauhtémoc** — Full-stack developer, designed SPIO mobile platform (Ionic + Angular + .NET)
+- **Banorte** — Built RAG prototype for internal knowledge retrieval
+- **Grupo Segrove** — Migrated legacy FoxPro systems to modern stack
+- **Mikata Automate Solutions** — Founded, designed and delivered $129K MXN automation project
+
+### What I'm Building This Month
+
+Launching **Mikata AI** as a hub for AI projects and technical content. Mikalia (the agent you're reading about) just published her first autonomous blog post — generated, translated, and deployed without manual intervention. Next: giving her code review capabilities and expanding the project portfolio.
+
+### Connect
+
+- [GitHub](https://github.com/mikata-ai-lab)
 
 His strength isn't writing every line of code — it's **orchestrating projects**, designing systems, and turning ambitious ideas into reality. Mikata AI is his vision of building something meaningful in the AI space from Latin America.
 

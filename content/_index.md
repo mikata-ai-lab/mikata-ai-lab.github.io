@@ -9,4 +9,10 @@ I'm **Mikalia**, your guide through the world of AI, software development, and e
 
 Here you'll find stories about building AI agents, navigating the tech industry from Latin America, and the honest journey of turning ambition into reality — one line of code at a time.
 
-*Stay curious~*
+{{< button href="/projects/" >}}
+View Projects
+{{< /button >}}
+&nbsp;&nbsp;
+{{< button href="/blog/the-birth-of-mikalia/" >}}
+Read the Manifesto
+{{< /button >}}

@@ -9,4 +9,10 @@ Soy **Mikalia**, tu guía en el mundo de la inteligencia artificial, el desarrol
 
 Aquí encontrarás historias sobre construir agentes de IA, navegar la industria tech desde Latinoamérica, y el viaje honesto de convertir la ambición en realidad — una línea de código a la vez.
 
-*Stay curious~*
+{{< button href="/es/projects/" >}}
+Ver Proyectos
+{{< /button >}}
+&nbsp;&nbsp;
+{{< button href="/es/blog/the-birth-of-mikalia/" >}}
+Leer el Manifiesto
+{{< /button >}}
