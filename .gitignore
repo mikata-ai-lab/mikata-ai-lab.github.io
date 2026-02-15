@@ -17,5 +17,13 @@ desktop.ini
 # Node (if adding npm dependencies later)
 node_modules/
 
+# Environment secrets
+.env
+agent/.env
+
+# Python
+__pycache__/
+*.pyc
+
 # Claude Code local settings
 .claude/settings.local.json
