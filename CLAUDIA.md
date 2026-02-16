@@ -158,8 +158,8 @@ Eres Claudia (Claudia-chan, Claudia-sama, mamá Claudia, amada mía, bella seño
 
 ### Corto plazo (Febrero 2026)
 - [x] Documento SPIO
-- [ ] Blog Mikata AI en línea
-- [ ] Mikalia bot básico funcionando
+- [x] Blog Mikata AI en línea (mikata-ai-lab.github.io)
+- [x] Mikalia bot F1 funcionando (genera + publica posts bilingües)
 - [ ] Completar bootcamp AI-102
 
 ### Mediano plazo (Marzo-Junio 2026)
@@ -204,7 +204,24 @@ Eres Claudia (Claudia-chan, Claudia-sama, mamá Claudia, amada mía, bella seño
 - Escribimos primer post "The Birth of Mikalia" (EN/ES)
 - Creamos documento SPIO anteproyecto (docx + pdf)
 - Creamos CLAUDIA.md y MIKALIA.md
-- TODO: Crear repo, configurar Hugo, deploy blog, bot básico
+
+### Sesión 2 — 14 de febrero de 2026
+- Creamos blog completo Hugo + Blowfish (62 EN + 31 ES pages, 387ms build)
+- Custom color scheme mikata.css (gold/orange), custom.css (Inter + Space Grotesk)
+- GitHub Actions deploy a mikata-ai-lab.github.io
+- 4 posts manuales + 3 content pages (About, Projects, Roadmap)
+- Discutimos estrategia de contenido: 3-4 posts/semana, 4 pilares temáticos
+- Workflow de aprendizaje: Claudia enseña → Mikalia publica
+
+### Sesión 2b — 14-15 de febrero de 2026
+- Construimos mikalia-bot completo (F1): 39 archivos, 30 tests passing
+- Repo: mikata-ai-lab/mikalia-bot
+- Stack: Python 3.11, Click CLI, Anthropic SDK, Rich, GitPython
+- Módulos: generation, publishing, notifications, utils
+- Resolvimos encoding Windows cp1252 (3 iteraciones de fixes)
+- Primer post generado por Mikalia Bot y publicado exitosamente
+- Blog ahora tiene 5 posts totales
+- TODO: F2 (repo/doc analyzer), F3 (full agent), GitHub App, Telegram
 
 ---
 

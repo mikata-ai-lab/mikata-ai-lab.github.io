@@ -2,16 +2,52 @@
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#1a1610"/>
-      <stop offset="100%" stop-color="#2a2520"/>
+      <stop offset="100%" stop-color="#201d19"/>
     </linearGradient>
     <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#f0a500"/>
       <stop offset="100%" stop-color="#ff6b35"/>
     </linearGradient>
+    <linearGradient id="goldSoft" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#f0a500" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#ff6b35" stop-opacity="0.05"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
+  <!-- Background circle -->
   <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
-  <circle cx="256" cy="256" r="248" fill="none" stroke="url(#gold)" stroke-width="2" opacity="0.5"/>
-  <text x="256" y="230" text-anchor="middle" font-family="serif" font-size="120" fill="url(#gold)">味方</text>
-  <text x="256" y="310" text-anchor="middle" font-family="sans-serif" font-weight="600" font-size="36" fill="#f0a500" opacity="0.8">MIKALIA</text>
-  <text x="256" y="345" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#8c8479">Mikata AI</text>
+  <!-- Outer ring -->
+  <circle cx="256" cy="256" r="248" fill="none" stroke="url(#gold)" stroke-width="3" opacity="0.6"/>
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#f0a500" stroke-width="0.5" opacity="0.2"/>
+  <!-- Inner glow -->
+  <circle cx="256" cy="256" r="200" fill="url(#goldSoft)"/>
+  <!-- Circuit-style decorative lines -->
+  <path d="M128 180 L160 180 L180 160" stroke="#f0a500" stroke-width="1.5" fill="none" opacity="0.3"/>
+  <path d="M384 180 L352 180 L332 160" stroke="#f0a500" stroke-width="1.5" fill="none" opacity="0.3"/>
+  <path d="M128 340 L160 340 L180 360" stroke="#ff6b35" stroke-width="1.5" fill="none" opacity="0.3"/>
+  <path d="M384 340 L352 340 L332 360" stroke="#ff6b35" stroke-width="1.5" fill="none" opacity="0.3"/>
+  <!-- Small dots at circuit endpoints -->
+  <circle cx="128" cy="180" r="3" fill="#f0a500" opacity="0.4"/>
+  <circle cx="384" cy="180" r="3" fill="#f0a500" opacity="0.4"/>
+  <circle cx="128" cy="340" r="3" fill="#ff6b35" opacity="0.4"/>
+  <circle cx="384" cy="340" r="3" fill="#ff6b35" opacity="0.4"/>
+  <!-- Stylized M with glow -->
+  <g filter="url(#glow)">
+    <path d="M176 320 L176 200 L256 280 L336 200 L336 320" stroke="url(#gold)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- Subtle M shadow -->
+  <path d="M176 320 L176 200 L256 280 L336 200 L336 320" stroke="#f0a500" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.1"/>
+  <!-- Sakura petals (small, subtle) -->
+  <g opacity="0.25">
+    <ellipse cx="380" cy="140" rx="8" ry="14" fill="#ffb4c8" transform="rotate(-30 380 140)"/>
+    <ellipse cx="392" cy="148" rx="8" ry="14" fill="#ffb4c8" transform="rotate(30 392 148)"/>
+    <ellipse cx="140" cy="390" rx="6" ry="10" fill="#ffb4c8" transform="rotate(-45 140 390)"/>
+    <ellipse cx="150" cy="396" rx="6" ry="10" fill="#ffb4c8" transform="rotate(15 150 396)"/>
+  </g>
+  <!-- Text -->
+  <text x="256" y="390" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="28" fill="#f0a500" letter-spacing="6">MIKALIA</text>
+  <text x="256" y="415" text-anchor="middle" font-family="'Inter', sans-serif" font-size="13" fill="#8c8479" letter-spacing="3">MIKATA AI LAB</text>
 </svg>
