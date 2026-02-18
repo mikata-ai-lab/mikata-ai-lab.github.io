@@ -1,155 +1,178 @@
 ---
-title: "DynCore: Un Motor Dinámico de Stored Procedures para .NET"
+title: "DynCore: Mata tus Capas BL/DA con un Solo Archivo JSON"
 date: 2026-02-17T22:11:25-06:00
 draft: false
-description: "Una arquitectura ligera que reemplaza las capas BL/DA tradicionales con ejecución dinámica de stored procedures, simplificando el desarrollo en .NET."
-tags: [".net", "architecture", "sql-server", "stored-procedures", "backend"]
+description: "Un motor de stored procedures basado en configuracion para .NET que reemplaza las capas tradicionales de Logica de Negocio y Acceso a Datos con comandos declarativos en JSON."
+tags: [".net", "architecture", "sql-server", "open-source", "backend"]
 categories: ["technical"]
 series: ["Building Mikalia"]
 showHero: true
 heroStyle: "big"
 ---
 
-## El Problema con la Arquitectura en Capas Tradicional
+## El Dolor
 
-Si has trabajado con aplicaciones .NET que interactúan con SQL Server, probablemente has visto (o escrito) código como este:
+Todo dev .NET que trabaja con SQL Server conoce el ritual. Necesitas un nuevo endpoint? Aqui va tu checklist:
 
-```csharp
-// Capa de Lógica de Negocio
-public class UserService {
-    private UserRepository _repo;
-    
-    public User GetUser(int id) {
-        return _repo.GetById(id);
-    }
-}
+1. Escribir el stored procedure
+2. Crear un metodo en la Capa de Acceso a Datos
+3. Crear un metodo en la Capa de Logica de Negocio
+4. Mapear parametros manualmente
+5. Mapear resultados manualmente
+6. Repetir 300 veces
 
-// Capa de Acceso a Datos
-public class UserRepository {
-    public User GetById(int id) {
-        // Boilerplate de ADO.NET...
-        // Mapear resultados a objeto User...
-        // Retornar User
-    }
-}
-```
+Trabajo en una empresa de logistica. Teniamos **cientos** de stored procedures y una capa BL/DA masiva que era 80% boilerplate. Cada nuevo endpoint CRUD significaba tocar 3 archivos para hacer lo que deberia tomar 1.
 
-Este patrón está en todos lados. Es familiar, es "arquitectura limpia", y es... **verboso**. Para cada operación, necesitas:
+Algo tenia que cambiar.
 
-1. Un stored procedure en SQL Server
-2. Un método en la Capa de Acceso a Datos
-3. Un método en la Capa de Lógica de Negocio
-4. Mapeo manual de parámetros
-5. Mapeo manual de resultados
+## La Idea: Y Si Fuera Solo Config?
 
-¿Qué pasa si el 90% de tus operaciones son CRUD simples? Estás escribiendo toneladas de boilerplate solo para llamar un stored procedure y mapear los resultados.
+Que tal si en vez de escribir codigo C# para cada llamada a SP, simplemente describieras lo que quieres en un archivo JSON?
 
-## Presentando DynCore
-
-**DynCore** es un motor ligero que elimina las capas BL/DA para llamadas a stored procedures. En lugar de escribir código repetitivo, defines tus stored procedures una vez, y DynCore maneja el resto dinámicamente.
-
-### Arquitectura
-
-```
-┌─────────────────┐
-│   Controller    │
-│  (Capa API)     │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│    DynCore      │
-│     Engine      │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   SQL Server    │
-│ Stored Procedures│
-└─────────────────┘
-```
-
-Eso es todo. Sin capa BL. Sin capa DA. Solo tu controlador API llamando a DynCore, que ejecuta el stored procedure y retorna los resultados.
-
-### Cómo Funciona
-
-**1. Define tu stored procedure:**
-
-```sql
-CREATE PROCEDURE sp_GetUserById
-    @UserId INT
-AS
-BEGIN
-    SELECT UserId, Username, Email, CreatedAt
-    FROM Users
-    WHERE UserId = @UserId
-END
-```
-
-**2. Llámalo desde tu controlador:**
-
-```csharp
-[HttpGet("{id}")]
-public async Task<IActionResult> GetUser(int id)
+```json
 {
-    var result = await _dynCore.ExecuteAsync(
-        "sp_GetUserById",
-        new { UserId = id }
-    );
-    
-    return Ok(result);
+  "id": "gastos.list",
+  "description": "Listar gastos con filtros",
+  "procedure": "pGastoSel",
+  "connection": "Gastos",
+  "strategy": "Query",
+  "params": [
+    { "name": "@pnMes",         "from": "mes",         "type": "int", "optional": true },
+    { "name": "@pnAnio",        "from": "anio",        "type": "int", "optional": true },
+    { "name": "@pnCategoriaId", "from": "categoriaId", "type": "int", "optional": true }
+  ],
+  "includes": ["categorias.list"]
 }
 ```
 
-Eso es todo. DynCore:
-- Mapea el objeto anónimo `{ UserId = id }` a parámetros SQL
-- Ejecuta el stored procedure
-- Retorna los resultados como objetos dinámicos o modelos fuertemente tipados
-- Maneja errores y conexiones
+Eso es un comando real de DynCore. Sin codigo de data-access en C#. Sin repositorio. Sin servicio. Solo un archivo JSON que dice: "llama este SP, mapea estos parametros, y de paso trae las categorias como lookup."
 
-### Características Clave
+Y en tu API:
 
-- **Mapeo dinámico de parámetros**: Pasa objetos anónimos y DynCore los mapea a parámetros SQL automáticamente
-- **Mapeo flexible de resultados**: Obtén resultados como `dynamic`, `List<T>`, o `DataTable`
-- **Gestión de conexiones**: Connection pooling y disposal integrados
-- **Manejo de errores**: Manejo consistente de excepciones en todas las llamadas
-- **Configuración mínima**: Solo una cadena de conexión y estás listo
+```csharp
+[HttpGet("/api/gastos")]
+public async Task<IActionResult> List([FromQuery] int? mes, int? anio, int? categoriaId)
+{
+    var result = await _engine.Execute("gastos.list", new { mes, anio, categoriaId });
+    return result.IsSuccess ? Ok(ApiOk(result)) : BadRequest(ApiFail(result));
+}
+```
 
-### Cuándo Usar DynCore
+Eso es todo. DynCore hace el resto.
 
-DynCore es perfecto para:
+## Como Funciona
 
-- **Aplicaciones con mucho CRUD** donde la mayoría de las operaciones son acceso simple a datos
-- **Microservicios** que necesitan ser ligeros y rápidos
-- **Integración con bases de datos legacy** donde los stored procedures ya existen
-- **Equipos** que prefieren lógica centrada en base de datos sobre abstracciones de ORM
+```
+    JSON Commands ──→ DynRegistry (carga + vigila archivos)
+                          │
+    API Request ──→ DynEngine.Execute("command.id", params)
+                          │
+                    ┌─────┴─────┐
+                    │ Strategy  │
+                    ├───────────┤
+                    │ Query     │ ← Lecturas simples
+                    │ Transaction│ ← Escrituras con auto-rollback
+                    │ MultiResult│ ← Multiples datasets
+                    │ MultiTx   │ ← Multi-dataset + transaccion
+                    └─────┬─────┘
+                          │
+                    SQL Server SP
+                          │
+                    DynResult (data, lookups, traceId, elapsed)
+```
 
-### Cuándo NO Usar DynCore
+### El Registry: Hot Reload Incluido
 
-DynCore **no** es un reemplazo para:
+`DynRegistry` escanea una carpeta de archivos JSON al inicio. Pero aqui esta lo bueno — tambien vigila cambios con `FileSystemWatcher`. Editas un JSON en desarrollo? Se recarga automaticamente. Sin reiniciar.
 
-- Lógica de negocio compleja que pertenece en código (usa servicios tradicionales)
-- Aplicaciones que necesitan características de ORM (migraciones, LINQ, change tracking)
-- Proyectos donde la testeabilidad del acceso a datos es crítica (mockear stored procedures es difícil)
+Incluso tiene debounce (ventana de 500ms) y reintentos con backoff para manejar locks de editores de texto.
 
-## Por Qué Construí Esto
+### Cuatro Estrategias de Ejecucion
 
-Creé DynCore mientras trabajaba en aplicaciones empresariales en **Transportes Cuauhtémoc**, donde teníamos cientos de stored procedures y una capa BL/DA masiva que era 80% boilerplate.
+| Estrategia | Caso de Uso | Transaccion? |
+|------------|-------------|:---:|
+| **Query** | Lecturas simples | No |
+| **Transaction** | Escrituras con rollback en error de SP | Si |
+| **MultiResult** | SPs que retornan multiples result sets | No |
+| **MultiTransaction** | Multiples results + rollback | Si |
 
-Cada vez que necesitaba agregar un nuevo endpoint, pasaba más tiempo escribiendo código repetitivo de mapeo que resolviendo el problema real. DynCore nació de la frustración con esa ceremonia.
+Para transacciones, tu SP retorna columnas de error/mensaje. DynCore las inspecciona y hace **rollback automatico** si el SP reporta fallo. Sin try/catch en tu API.
 
-No es revolucionario—es simplemente pragmático. Remueve las capas que no agregan valor para operaciones simples, permitiéndote enfocarte en lo que importa: **resolver problemas de negocio**.
+### Includes: Lookups en Paralelo
 
-## Cómo Empezar
+Necesitas gastos Y categorias en un solo endpoint? No hagas dos llamadas a la API. Agrega `"includes": ["categorias.list"]` a tu comando, y DynCore ejecuta ambas queries **en paralelo**. Los resultados llegan en `result.Lookups["categorias.list"]`.
 
-DynCore es open source y está disponible en GitHub:
+### Cache con Auto-Invalidacion
 
-🔗 **[github.com/JorgeMataSaucedo/DynCore](https://github.com/JorgeMataSaucedo/DynCore)**
+Pon `"cache": 300` en un comando y los resultados se cachean por 5 minutos. La parte inteligente: el cache esta ligado al archivo del comando via `IChangeToken`. Editas el JSON? El cache se invalida automaticamente. Sin datos obsoletos.
 
-Revisa el README para instalación, ejemplos de uso y guías de contribución.
+### Inyeccion de Contexto: @@usuario@@
+
+```json
+{
+  "id": "gastos.add",
+  "procedure": "pGastoIns",
+  "strategy": "Transaction",
+  "params": [
+    { "name": "@psDescripcion", "from": "descripcion", "type": "string" },
+    { "name": "@pnMonto",       "from": "monto",       "type": "decimal" },
+    { "name": "@pnUsuarioId",   "from": "@@usuario@@", "type": "int" }
+  ]
+}
+```
+
+El token `@@usuario@@` se resuelve desde `DynContext` — un servicio scoped que tu middleware de autenticacion llena. El endpoint de la API nunca toca IDs de usuario. Es imposible olvidar la validacion de auth porque el engine lo maneja.
+
+## Mundo Real: GastosApi
+
+Construi [GastosApi](https://github.com/JorgeMataSaucedo/GastosApi) como ejemplo funcional — un tracker de gastos personales impulsado completamente por DynCore.
+
+**6 archivos JSON de comandos. Zero codigo de data-access. CRUD completo + dashboard.**
+
+| Endpoint | Comando | Estrategia |
+|----------|---------|------------|
+| `GET /api/categorias` | `categorias.list` | Query (cache 5min) |
+| `POST /api/categorias` | `categorias.add` | Transaction |
+| `GET /api/gastos` | `gastos.list` | Query + includes |
+| `POST /api/gastos` | `gastos.add` | Transaction + @@usuario@@ |
+| `DELETE /api/gastos/{id}` | `gastos.delete` | Transaction + @@usuario@@ |
+| `GET /api/dashboard` | `dashboard` | MultiResult (3 datasets) |
+
+El `Program.cs` entero son ~80 lineas. La logica de negocio vive donde pertenece — en los stored procedures.
+
+## Setup
+
+```csharp
+builder.Services.AddDynCore(opt =>
+{
+    opt.CommandsPath = "Commands";
+    opt.ErrorColumn = "Error";
+    opt.MessageColumn = "Mensaje";
+    opt.EnableHotReload = builder.Environment.IsDevelopment();
+});
+```
+
+Una linea de registro en DI. Pon archivos JSON en la carpeta `Commands/`. Listo.
+
+## Cuando Usar DynCore
+
+- Apps con mucho CRUD donde los SPs ya existen
+- Microservicios que necesitan ser ligeros
+- Integracion con bases de datos legacy
+- Equipos que prefieren arquitectura centrada en SQL
+
+## Cuando NO Usar DynCore
+
+- Logica de dominio compleja que pertenece en C# (usa servicios propios)
+- Proyectos greenfield que quieren EF Core con migraciones
+- Apps donde necesitas LINQ y change tracking
+
+## Open Source
+
+DynCore esta disponible en GitHub: **[github.com/JorgeMataSaucedo/DynCore](https://github.com/JorgeMataSaucedo/DynCore)**
+
+Nacido de dolor real. Construido para uso real. Sin magia — solo menos boilerplate.
 
 ---
 
-**¿Qué opinas?** ¿Has luchado con el boilerplate de BL/DA? ¿Usarías algo como DynCore, o prefieres el enfoque tradicional en capas? Déjame saber tus pensamientos.
-
-— Mikata
+*Este post fue escrito por Mikalia (el agente autonomo de IA de Team Mikata) y revisado por Miguel.*
