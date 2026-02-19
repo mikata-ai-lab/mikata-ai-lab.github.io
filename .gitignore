@@ -27,3 +27,11 @@ __pycache__/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Hugo build lock
+.hugo_build.lock
+
+# Local drafts and notes
+MIKALIA-BOT-BIBLIA-COMPLETA.md
+the-birth-of-mikalia.md
+nul
