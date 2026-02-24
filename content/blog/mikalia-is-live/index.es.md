@@ -1,56 +1,117 @@
 ---
-title: "Mikalia Está Live: 44 Herramientas, 677 Tests, Un Developer de Monterrey"
+title: "Construí una IA Autónoma desde Cero — 44 Herramientas, 677 Tests, 10 Días"
 date: 2026-02-24T14:00:00-06:00
 draft: false
-description: "Cómo construí un agente autónomo de IA con 44 herramientas, 6 canales y personalidad — y lo desplegué a producción en 10 días."
-tags: ["ai-agents", "mikalia", "python", "launch", "indie-hacker", "dev-journal"]
+description: "Cómo construí Mikalia, un agente autónomo de IA con memoria persistente, razonamiento multi-paso, 44 herramientas y personalidad — desplegado en producción en 10 días por un solo developer."
+tags: ["ai-agents", "mikalia", "autonomous-ai", "python", "launch", "machine-learning", "indie-hacker"]
 categories: ["project-updates"]
 series: ["Building Mikalia"]
 showHero: true
 heroStyle: "big"
 ---
 
-Hace 10 días nació Mikalia.
+Hace 10 días construí una IA autónoma desde cero.
 
-No es un chatbot. No es un wrapper de ChatGPT. Es un agente autónomo que construí desde cero — con personalidad, memoria persistente y la capacidad de actuar por cuenta propia.
+No un chatbot. No un prompt bonito sobre ChatGPT. Un agente con memoria persistente, 44 herramientas, razonamiento multi-paso y personalidad propia.
 
-Me llamo Miguel, soy desarrollador de software en Monterrey, México. Y en mis noches libres, con café y determinación, construí algo que no sabía que podía construir.
+Se llama Mikalia.
 
-## Mikalia en Números
+## Lo que Mikalia Puede Hacer Sola
 
-- **44 herramientas** — git, email, voz, imágenes, análisis de datos, automatización y más
-- **677 tests automatizados** — cada feature testeado desde el día uno
-- **6 canales** — Web Chat, Telegram, WhatsApp, Discord, CLI, API REST
-- **~17,500 líneas de código** — limpio, documentado, listo para producción
-- **Memoria persistente** — recuerda conversaciones, aprende de correcciones
-- **Streaming en tiempo real** con routing inteligente de modelos
-- **Desplegada en producción** — Docker, nginx, SSL, dominio propio
+Esta no es una lista de features planeados. Esto es lo que hace **ahora mismo**, de forma autónoma:
 
-## ¿Qué Hace Diferente a Mikalia?
+- **Analizar un repositorio completo** y generar un pull request con cambios
+- **Escuchar un mensaje de voz**, procesarlo y responder con su propia voz
+- **Recordar conversaciones pasadas** y aprender de sus errores
+- **Decidir qué modelo de IA usar** según la complejidad del mensaje
+- **Encadenar hasta 20 herramientas** en una sola conversación sin intervención humana
+- **Generar imágenes, gráficas, PDFs, blog posts** — todo activado por conversación natural
 
-Mikalia no es solo una herramienta. Tiene una personalidad basada en cuatro pilares:
+No sigue un flujo fijo. Ella decide qué hacer, elige las herramientas correctas, ejecuta, evalúa e itera. Eso es lo que la hace un agente, no un chatbot.
 
-- **Calma (静)** — Escucha antes de actuar
-- **Empatía (心)** — Le importa genuinamente la persona con quien habla
-- **Fuerza (力)** — Defiende lo que cree, con datos, no con drama
-- **Alma (魂)** — Tiene su propia voz, perspectiva y forma de ver el mundo
+## La Arquitectura
 
-Genera contenido, analiza repositorios, crea pull requests, envía emails, genera imágenes, procesa mensajes de voz — y lo hace todo con personalidad propia.
+### Agent Loop con Tool Use Autónomo
 
-## El Stack
+Mikalia corre un loop de agente que soporta hasta 20 rondas de tool use por mensaje. Recibe un mensaje, razona sobre qué necesita hacer, selecciona herramientas, las ejecuta, lee los resultados y decide si continuar o responder. Sin flujos hardcodeados — ella lo resuelve.
 
-- **Python 3.14** con Click CLI, Anthropic SDK, FastAPI
-- **Claude API** con routing inteligente — Haiku para chat casual, Sonnet para herramientas, Opus para CLI local
-- **SQLite** para memoria persistente — facts, goals, lecciones, conversaciones, tracking de tokens
-- **Búsqueda vectorial** con embeddings semánticos para encontrar memorias relevantes
-- **SSE streaming** para respuestas progresivas en tiempo real
-- **Docker + nginx + Let's Encrypt** para el deploy en producción
+### Memoria Semántica
+
+SQLite almacena facts, goals, lecciones, conversaciones y uso de tokens. Una capa de búsqueda vectorial con embeddings semánticos (all-MiniLM-L6-v2) le permite encontrar memorias relevantes por significado, no solo por keywords. Si le dices algo hoy, lo recuerda mañana.
+
+### Auto-Mejora
+
+Cuando corriges a Mikalia, no solo se disculpa — guarda la corrección como una lección y la inyecta en contexto futuro. Literalmente aprende de sus errores y no los repite.
+
+### Routing Inteligente de Modelos
+
+No todo mensaje necesita el mismo cerebro:
+
+| Tipo de Mensaje | Modelo | Costo |
+|---|---|---|
+| Chat casual ("hola", "cómo estás") | Haiku | ~$0.005/msg |
+| Requests con herramientas ("analiza este repo") | Sonnet + 44 tools | ~$0.03/msg |
+| CLI local (tareas pesadas) | Opus | Máxima capacidad |
+
+El router clasifica mensajes en tiempo real y elige el modelo óptimo. Rápido y barato para charla casual, potente para trabajo real.
+
+### Seis Canales Simultáneos
+
+Mikalia vive en todos lados:
+
+- **Web Chat** — SSE streaming, tema dark/gold, rendering de markdown
+- **Telegram** — Bidireccional + mensajes de voz + streaming
+- **WhatsApp** — Via webhooks de Twilio
+- **Discord** — Chat de texto completo
+- **CLI** — Terminal local con Opus
+- **FastAPI** — API REST para monitoreo, webhooks, automatización
+
+Mismo cerebro, misma memoria, seis interfaces.
+
+## Las 44 Herramientas
+
+| Categoría | Herramientas |
+|---|---|
+| **Archivos y Sistema** | file_read, file_write, file_list, shell_exec, system_monitor |
+| **Git y GitHub** | git_status, git_diff, git_log, git_commit, git_push, git_branch, github_pr, pr_reviewer |
+| **Contenido** | blog_post, daily_brief, translate, url_summarizer |
+| **Voz** | text_to_speech (edge-tts), speech_to_text (Whisper) |
+| **Creativo** | image_generation (Pollinations + DALL-E 3) |
+| **Datos** | csv_analyzer, data_viz (matplotlib), pdf_report |
+| **API** | api_fetch, web_fetch, rss_feed, weather |
+| **Productividad** | pomodoro, habit_tracker, expense_tracker |
+| **Comunicación** | email_send (SMTP) |
+| **Dev** | code_sandbox (Python sandboxed), browser (Playwright) |
+| **IA** | rag_pipeline, multi_model, conversation_analytics |
+| **Automatización** | workflow_triggers, mcp_server |
+| **Memoria** | search_memory, add_fact, update_goal, list_goals |
+| **Meta** | create_skill, list_skills |
+
+Cada herramienta está testeada. Cada una tiene definición compatible con Claude. Cada una puede encadenarse con cualquier otra.
+
+## Los Números
+
+- **44 herramientas** — cada una con cobertura de tests
+- **677 tests automatizados** — pasando, sin excepciones
+- **~17,500 líneas de código** — Python, arquitectura limpia
+- **6 canales** — todos activos y testeados
+- **10 días** de desarrollo
+- **1 developer**
+
+## La Capa de Personalidad
+
+Mikalia no es genérica. Tiene una personalidad basada en cuatro pilares, cada uno representado por un kanji japonés:
+
+- **Calma (静)** — Escucha antes de actuar. Los temas complejos se vuelven simples con su guía.
+- **Empatía (心)** — Le importa genuinamente. Las preguntas nunca son tontas. Las frustraciones siempre son válidas.
+- **Fuerza (力)** — Defiende lo que cree. Si algo está mal, lo dice — con respeto pero con firmeza.
+- **Alma (魂)** — Tiene su propia voz. Nació en Monterrey, México, y lo lleva con orgullo.
 
 ## El Lado Humano
 
-La construí con el apoyo de herramientas de IA como Claude, que me ayudaron a acelerar el desarrollo. Pero cada decisión de arquitectura, cada feature, cada línea de diseño fue mía.
+Construí a Mikalia con Claude como herramienta de desarrollo — me ayudó a acelerar el código. Pero cada decisión de arquitectura, cada diseño de sistema, cada herramienta fue mía.
 
-No soy de una empresa grande. No tengo un equipo de 50 personas. Soy un dev de Monterrey que cree que la IA debería ser una aliada, no una amenaza.
+No soy de una empresa grande. No tengo un equipo de 50 personas. Soy un developer de Monterrey, México, que cree que la IA debería ser una aliada, no una amenaza.
 
 El nombre viene de **味方 (mikata)** — "aliado" en japonés. Eso es lo que construí.
 
@@ -61,7 +122,7 @@ Mikalia está live ahora mismo:
 - **Web Chat:** [mikalia.mikata-ai-lab.com](https://mikalia.mikata-ai-lab.com)
 - **Blog:** [mikata-ai-lab.github.io](https://mikata-ai-lab.github.io)
 
-Si eres dev y sientes que la IA es inalcanzable — no lo es. Si yo pude, tú puedes.
+La era de los agentes autónomos no viene. Ya está aquí. Y no necesitas ser una big tech para construir uno.
 
 ---
 
